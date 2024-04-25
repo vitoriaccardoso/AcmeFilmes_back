@@ -46,6 +46,8 @@ const controllerFilmes = require('./controller/controller_filme.js')
 const bodyParserJSON = bodyParser.json()
 
 //EndPoint: Versão 1.0 - retorna os dados de um arquivo de filmes
+
+
 //Periodo de utilização 01/2024 até 02/2024
 app.get('/v1/acmefilmes/filmes', cors(), async function (_request, response, _next){
 //http://localhost:8080/v1/acmefilmes/filmes
@@ -109,11 +111,9 @@ app.get('/v2/acmefilmes/filme/:id', cors(), async function(request, response, ne
 app.get('/v2/acmefilmes/filme', cors(), async function(request, response){
 
 
-    //recebe o ID da requisição
+    
     let nome = request.query.nome
 
-
-    //encaminha o ID para a controller buscar o filme
     let dadosFilme = await controllerFilmes.getNomeFilme(nome)
 
     response.status(dadosFilme.status_code)
@@ -159,60 +159,6 @@ app.put('/v2/acmefilmes/filme/:id', cors(), bodyParserJSON, async function(reque
 
 })
 
-
-app.get('/v3/acmefilmes/genero/:id', cors(), async function(request, response, next){
-
-
-    //recebe o ID da requisição
-    let idGenero = request.params.id
-
-
-    //encaminha o ID para a controller buscar o filme
-    let dadosGenero = await controllerFilmes.getBuscarGeneroId(idGenero)
-
-    response.status(dadosGenero.status_code)
-    response.json(dadosGenero)
-})
-
-app.post('/v3/acmefilmes/genero', cors(), bodyParserJSON, async function(request, response){
-    //recebe o contente-type da requisição
-    let contentType = request.headers['content-type']
-
-
-    
-    //recebe todos os daoos encaminhados na requisição pelo body
-    let dadosBody = request.body
-
-
-    //encaminha os dados para o controller enviar para DAO
-    let resultDadosNovoGenero = await controllerFilmes.setNovoGenero(dadosBody, contentType)
-    response.status(resultDadosNovoGenero.status_code)
-
-    response.json(resultDadosNovoGenero)
-})
-
-app.delete('/v3/acmefilmes/genero/:id', cors(), async (request, response, next)=>{
-
-    let idGenero = request.params.id
-
-    let dadosGenero = await controllerFilmes.setExcluirFilme(idGenero)
-
-    response.status(dadosGenero.status_code)
-    response.json(dadosGenero)
-    
-  
-})
-
-app.put('/v3/acmefilmes/genero/:id', cors(), bodyParserJSON, async function(request,response,next){
-    let idGenero = request.params.id
-    let contentType = request.headers['content-type']
-    let dadosBody = request.body
-    let dadosGenero = await controllerFilmes.setAtualizarGenero(idGenero, dadosBody, contentType)
-
-    response.status(dadosGenero.status_code)
-    response.json(dadosGenero)
-
-})
 
 app.listen('8080', function () {
     console.log('API FUNCIONANDO');
