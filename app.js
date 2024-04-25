@@ -32,7 +32,7 @@ const app = express();
 
 app.use((_request,response,next) =>{
     response.header('Acess-Control-Allow-Origin','*');
-    response.header('Acess-Control-Allow-Methods', 'GET');
+    response.header('Acess-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     app.use(cors())
     
     next();
@@ -41,6 +41,9 @@ app.use((_request,response,next) =>{
 /***************IMPORT DOS ARQUIVOS DE CONTROLLER DE PROJETO****************************** */
 
 const controllerFilmes = require('./controller/controller_filme.js')
+
+//Criando um objeto para ontrolar a chegada dos dados da requisição em formato JSON
+const bodyParserJSON = bodyParser.json()
 
 //EndPoint: Versão 1.0 - retorna os dados de um arquivo de filmes
 //Periodo de utilização 01/2024 até 02/2024
@@ -117,6 +120,99 @@ app.get('/v2/acmefilmes/filme', cors(), async function(request, response){
     response.json(dadosFilme)
 })
 
+app.post('/v2/acmefilmes/filme', cors(), bodyParserJSON, async function(request, response){
+    //recebe o contente-type da requisição
+    let contentType = request.headers['content-type']
+
+
+    
+    //recebe todos os daoos encaminhados na requisição pelo body
+    let dadosBody = request.body
+
+
+    //encaminha os dados para o controller enviar para DAO
+    let resultDadosNovoFilme = await controllerFilmes.setInserirNovoFilme(dadosBody, contentType)
+    response.status(resultDadosNovoFilme.status_code)
+    response.json(resultDadosNovoFilme)
+})
+
+app.delete('/v2/acmefilmes/filme/:id', cors(), async (request, response, next)=>{
+
+    let idFilme = request.params.id
+
+    let dadosFilme = await controllerFilmes.setExcluirFilme(idFilme)
+
+    response.status(dadosFilme.status_code)
+    response.json(dadosFilme)
+    
+  
+})
+
+app.put('/v2/acmefilmes/filme/:id', cors(), bodyParserJSON, async function(request,response,next){
+    let idFilme = request.params.id
+    let contentType = request.headers['content-type']
+    let dadosBody = request.body
+    let dadosFilme = await controllerFilmes.setAtualizarFilme(idFilme, dadosBody, contentType)
+
+    response.status(dadosFilme.status_code)
+    response.json(dadosFilme)
+
+})
+
+
+app.get('/v3/acmefilmes/genero/:id', cors(), async function(request, response, next){
+
+
+    //recebe o ID da requisição
+    let idGenero = request.params.id
+
+
+    //encaminha o ID para a controller buscar o filme
+    let dadosGenero = await controllerFilmes.getBuscarGeneroId(idGenero)
+
+    response.status(dadosGenero.status_code)
+    response.json(dadosGenero)
+})
+
+app.post('/v3/acmefilmes/genero', cors(), bodyParserJSON, async function(request, response){
+    //recebe o contente-type da requisição
+    let contentType = request.headers['content-type']
+
+
+    
+    //recebe todos os daoos encaminhados na requisição pelo body
+    let dadosBody = request.body
+
+
+    //encaminha os dados para o controller enviar para DAO
+    let resultDadosNovoGenero = await controllerFilmes.setNovoGenero(dadosBody, contentType)
+    response.status(resultDadosNovoGenero.status_code)
+
+    response.json(resultDadosNovoGenero)
+})
+
+app.delete('/v3/acmefilmes/genero/:id', cors(), async (request, response, next)=>{
+
+    let idGenero = request.params.id
+
+    let dadosGenero = await controllerFilmes.setExcluirFilme(idGenero)
+
+    response.status(dadosGenero.status_code)
+    response.json(dadosGenero)
+    
+  
+})
+
+app.put('/v3/acmefilmes/genero/:id', cors(), bodyParserJSON, async function(request,response,next){
+    let idGenero = request.params.id
+    let contentType = request.headers['content-type']
+    let dadosBody = request.body
+    let dadosGenero = await controllerFilmes.setAtualizarGenero(idGenero, dadosBody, contentType)
+
+    response.status(dadosGenero.status_code)
+    response.json(dadosGenero)
+
+})
 
 app.listen('8080', function () {
     console.log('API FUNCIONANDO');
