@@ -41,6 +41,11 @@ app.use((_request,response,next) =>{
 /***************IMPORT DOS ARQUIVOS DE CONTROLLER DE PROJETO****************************** */
 
 const controllerFilmes = require('./controller/controller_filme.js')
+const controllerAtor = require('./controller/controller_ator.js')
+const controllerDiretor = require('./controller/controller_diretor.js')
+const controllerNacionalidade = require('./controller/controller_nacionalidade.js')
+const controllerSexo = require('./controller/controller_sexo.js')
+
 
 //Criando um objeto para ontrolar a chegada dos dados da requisição em formato JSON
 const bodyParserJSON = bodyParser.json()
@@ -339,13 +344,6 @@ app.get('/v3/acmefilmes/nacionalidade/:id', cors(), async function(request,respo
     response.json(dadosNacionalidade);
 })
 
-app.get('/v3/acmeFilmes/nacionalidade/Filtro', cors(), async function(request, response){
-    let nome = request.query.nome
-    let dadosNacionalidade = await controllerNacionalidade.setListarAtorNacionalidade(nome)
-
-    response.status(dadosNacionalidade.status_code)
-    response.json(dadosNacionalidade)
-})
 
 /*******************************************ATOR************************************************************** */
 app.get('/v3/acmefilmes/atores', cors(),async function (request,response,next){
@@ -358,7 +356,7 @@ app.get('/v3/acmefilmes/atores', cors(),async function (request,response,next){
    response.json(dadosAtor)
 });
 
-app.get('/v2/acmefilmes/atores/:id', cors(), async function(request,response,next){
+app.get('/v3/acmefilmes/atores/:id', cors(), async function(request,response,next){
 
     // recebe o id da requisição
     let idAtor = request.params.id
@@ -370,7 +368,7 @@ app.get('/v2/acmefilmes/atores/:id', cors(), async function(request,response,nex
     response.json(dadosAtor);
 })
 
-app.delete('/v2/acmefilmes/deleteAtor/:id', cors (), async function (request,response,next){
+app.delete('/v3/acmefilmes/deleteAtor/:id', cors (), async function (request,response,next){
 
     let idAtor = request.params.id
 
@@ -380,7 +378,7 @@ app.delete('/v2/acmefilmes/deleteAtor/:id', cors (), async function (request,res
     response.json(dadosAtor)
 })
 
-app.post('/v2/acmefilmes/atores', cors(), bodyParserJSON, async function (request, response,next ){
+app.post('/v3/acmefilmes/atores', cors(), bodyParserJSON, async function (request, response){
 
     // recebe o ContentType com os tipos de dados encaminhados na requisição
     let contentType = request.headers['content-type'];
@@ -389,14 +387,14 @@ app.post('/v2/acmefilmes/atores', cors(), bodyParserJSON, async function (reques
     let dadosBody = request.body;
     // encaminha os dados para a controller enviar para o DAO
     let resultDadosNovoAtor = await controllerAtor.setInserirAtor(dadosBody, contentType)
+    console.log(resultDadosNovoAtor);
 
 
-    response.status(resultDadosNovoAtor.status_code);
     response.json(resultDadosNovoAtor);
 
 })
 
-app.put('/v2/acmefilmes/updateAtor/:id', cors(), bodyParserJSON, async function(request,response,next){
+app.put('/v3/acmefilmes/updateAtor/:id', cors(), bodyParserJSON, async function(request,response,next){
 
     let idAtor = request.params.id
     let contentType = request.headers['content-type'];
@@ -426,25 +424,19 @@ app.get('/v3/acmefilmes/sexo', cors(),async function (_request,response,next){
     }
 });
 
-app.get('/v3/acmefilmes/sexo/:id', cors(), async function(request,response,next){
+app.get('/v3/acmefilmes/sexo/:id', cors(), async function(request,response){
 
     // recebe o id da requisição
     let idSexo = request.params.id
 
     //encaminha o id para a acontroller buscar o filme
-    let dadosSexo = await controllerSexo.setListarSexoById(idSexo);
-
-    response.status(dadosSexo.status_code);
-    response.json(dadosSexo);
-})
-
-app.get('/v3/acmeFilmes/sexo/Filtro', cors(), async function(request, response){
-    let nome = request.query.nome
-    let dadosSexo = await controllerSexo.setListarAtorSexo(nome)
+    let dadosSexo = await controllerSexo.setListarSexoById(idSexo)
 
     response.status(dadosSexo.status_code)
     response.json(dadosSexo)
 })
+
+
 
 /*******************************************DIRETOR************************************************************** */
 app.get('/v3/acmefilmes/diretores', cors(),async function (_request,response,next){
@@ -469,7 +461,7 @@ app.get('/v3/acmefilmes/diretores/:id', cors(), async function(request,response,
     response.json(dadosDiretor);
 })
 
-app.delete('/v3/acmefilmes/deleteDiretor/:id', cors (), async function (request,response,next){
+app.delete('/v3/acmefilmes/diretores/:id', cors (), async function (request,response,next){
 
     let idDiretor = request.params.id
 

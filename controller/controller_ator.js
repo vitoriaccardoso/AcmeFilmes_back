@@ -20,25 +20,30 @@ const setInserirAtor = async function(dadosAtor, contentType){
     try{
         // Validação de content-type (apenas aplication/json)
         if(String(contentType).toLowerCase() == 'application/json'){
+
+            console.log('ddddddddddddddd');
     
             // Cria o objeto JSON para devolver os dados criados na requisição
                 let novoAtorJSON = {}
             
-                
+                console.log(dadosAtor);
                 //Validação de campos obrigatórios ou com digitação inválida
                 if(dadosAtor.nome==''          ||dadosAtor.nome==undefined          ||dadosAtor.nome==null               ||dadosAtor.nome.length>100            ||
                 dadosAtor.nome_artistico==''   || dadosAtor.nome_artistico==undefined  || dadosAtor.nome_artistico==null       || dadosAtor.nome_artistico.length>100 ||
                 dadosAtor.data_nascimento==''  ||dadosAtor.data_nascimento==undefined  ||dadosAtor.data_nascimento==null       ||dadosAtor.data_nascimento.length!=10 ||
+                dadosAtor.data_falecimento==''  ||dadosAtor.data_falecimento==undefined  ||dadosAtor.data_falecimento==null       ||dadosAtor.data_falecimento.length!=10 ||
                 dadosAtor.biografia==''        ||dadosAtor.biografia==undefined        ||dadosAtor.biografia==null             ||dadosAtor.biografia.length>65000     ||
                 dadosAtor.foto==''             ||dadosAtor.foto==undefined             ||dadosAtor.foto==null                  ||dadosAtor.foto.length>150            ||
                 dadosAtor.id_sexo==''          ||dadosAtor.id_sexo==undefined          ||dadosAtor.id_sexo==null               ||isNaN(dadosAtor.id_sexo)    
                 
                 ){
-                    return message.ERROR_REQUIRED_FIELDS//400
+                    console.log('eeeeeeeeeeeee');
+                    return message.ERROR_REQUIRE_FIELDS//400
             
                 }
             
                 else{
+                    console.log('cccccccccc');
             
                     let validateStatus = false
                     // Outra validação com campos obrigatorios ou com digitação inválida
@@ -57,16 +62,16 @@ const setInserirAtor = async function(dadosAtor, contentType){
             
                     // Validação para verificar se a variavel booleana é verdadeira
                     if(validateStatus){
+                        console.log('bbbbbbbbbbb');
                         
                         // Encaminha os dados do filme para o DAO inserir no DB
                         let novoAtor = await atorDAO.insertAtor(dadosAtor)
+                        console.log(novoAtor);
                         
                         if(novoAtor){
                             let idAtores = await atorDAO.IDAtor()
                             dadosAtor.id = Number(idAtores[0].id)
                         }
-                        
-                        console.log()
                         // Validação para verificar se o DAO inseriu os dados do DB
                         if(novoAtor){
                             // console.log(novoAtor)

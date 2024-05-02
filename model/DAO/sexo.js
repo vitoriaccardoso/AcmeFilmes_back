@@ -29,7 +29,7 @@ const selectByIdSexo = async function (id){
     try {
         
     //script sql para filtrar pelo id
-    let sql = `select * from tbl_sexo where id = ${id}`;
+    let sql = `select * from tbl_sexo where id_sexo = ${id}`;
     //executa o sql no banco de dados
     let rsSexo = await prisma.$queryRawUnsafe(sql);
 
