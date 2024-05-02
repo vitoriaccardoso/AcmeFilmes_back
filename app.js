@@ -252,8 +252,6 @@ app.get('/v3/acmefilmes/generos', cors(), async function (_request, response) {
 
 
 
-/*******************************************classificacao************************************************************** */
-
 app.get('/v3/acmefilmes/classificacoes', cors(), async function (_request, response) {
         let dadosClassificacao = await controllerFilmes.getListarClassificacoes()
     
