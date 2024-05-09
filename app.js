@@ -205,7 +205,7 @@ app.delete('/v3/acmefilmes/genero/:id', cors(), async (request, response, next)=
 
     let idGenero = request.params.id
 
-    let dadosGenero = await controllerFilmes.setExcluirFilme(idGenero)
+    let dadosGenero = await controllerFilmes.setExcluirGenero(idGenero)
 
     response.status(dadosGenero.status_code)
     response.json(dadosGenero)
@@ -248,9 +248,9 @@ app.get('/v3/acmefilmes/generos', cors(), async function (_request, response) {
 
 
 
-//*********************************************************************************************CLASSIFICACAO*********************************************************************************************//
 
 
+/*******************************************classificacao************************************************************** */
 
 app.get('/v3/acmefilmes/classificacoes', cors(), async function (_request, response) {
         let dadosClassificacao = await controllerFilmes.getListarClassificacoes()
@@ -318,7 +318,7 @@ app.delete('/v3/acmefilmes/classificacao/:id', cors(), async (request, response,
 app.get('/v3/acmefilmes/nacionalidades', cors(),async function (_request,response,next){
 
     // chama a função da controller para retornar os filmes;
-    let dadosNacionalidade = await controllerNacionalidade.setListarNacionalidade();
+    let dadosNacionalidade = await controllerNacionalidade.getListarNacionalidades()
 
     // validação para retornar o Json dos filmes ou retornar o erro 404;
     if(dadosNacionalidade){
@@ -336,18 +336,22 @@ app.get('/v3/acmefilmes/nacionalidade/:id', cors(), async function(request,respo
     let idNacionalidade = request.params.id
 
     //encaminha o id para a acontroller buscar o filme
-    let dadosNacionalidade = await controllerNacionalidade.setListarNacionalidadeById(idNacionalidade);
+    let dadosNacionalidade = await controllerNacionalidade.getBuscarNacionalidadeId(idNacionalidade)
 
     response.status(dadosNacionalidade.status_code);
     response.json(dadosNacionalidade);
 })
 
 
+
+
+
+
 /*******************************************ATOR************************************************************** */
 app.get('/v3/acmefilmes/atores', cors(),async function (request,response,next){
 
     // chama a função da controller para retornar os filmes;
-    let dadosAtor = await controllerAtor.setListarAtor()
+    let dadosAtor = await controllerAtor.getListarAtor()
 
     // validação para retornar o Json dos filmes ou retornar o erro 404;
    response.status(dadosAtor.status_code)
@@ -360,13 +364,13 @@ app.get('/v3/acmefilmes/atores/:id', cors(), async function(request,response,nex
     let idAtor = request.params.id
 
     //encaminha o id para a acontroller buscar o Ator
-    let dadosAtor = await controllerAtor.setListarAtorById(idAtor)
+    let dadosAtor = await controllerAtor.getListarAtorByID(idAtor)
 
     response.status(dadosAtor.status_code);
     response.json(dadosAtor);
 })
 
-app.delete('/v3/acmefilmes/deleteAtor/:id', cors (), async function (request,response,next){
+app.delete('/v3/acmefilmes/delete/:id', cors (), async function (request,response,next){
 
     let idAtor = request.params.id
 
@@ -406,6 +410,19 @@ app.put('/v3/acmefilmes/updateAtor/:id', cors(), bodyParserJSON, async function(
 
 })
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*******************************************sexo************************************************************** */
 app.get('/v3/acmefilmes/sexo', cors(),async function (_request,response,next){
 
@@ -440,7 +457,7 @@ app.get('/v3/acmefilmes/sexo/:id', cors(), async function(request,response){
 app.get('/v3/acmefilmes/diretores', cors(),async function (_request,response,next){
 
     // chama a função da controller para retornar os filmes;
-    let dadosDiretor = await controllerDiretor.setListarDiretor()
+    let dadosDiretor = await controllerDiretor.getListarDiretores()
 
     // validação para retornar o Json dos filmes ou retornar o erro 404;
    response.status(dadosDiretor.status_code)
@@ -453,8 +470,7 @@ app.get('/v3/acmefilmes/diretores/:id', cors(), async function(request,response,
     let idDiretor = request.params.id
 
     //encaminha o id para a acontroller buscar o Ator
-    let dadosDiretor = await controllerDiretor.setListarDiretorById(idDiretor)
-
+    let dadosDiretor = await controllerDiretor.getListarDiretores(idDiretor)
     response.status(dadosDiretor.status_code);
     response.json(dadosDiretor);
 })
@@ -469,7 +485,35 @@ app.delete('/v3/acmefilmes/diretores/:id', cors (), async function (request,resp
     response.json(dadosDiretor)
 })
 
+app.post('/v3/acmefilmes/diretores', cors(), bodyParserJSON, async function (request, response){
 
+    // recebe o ContentType com os tipos de dados encaminhados na requisição
+    let contentType = request.headers['content-type'];
+
+    // vou receber o que chegar no corpo da requisição e guardar nessa variável local
+    let dadosBody = request.body;
+    // encaminha os dados para a controller enviar para o DAO
+    let resultDadosNovoDiretor = await controllerDiretor.setInserirNovoDiretor(dadosBody, contentType)
+    console.log(resultDadosNovoDiretor);
+
+
+    response.json(resultDadosNovoDiretor);
+
+})
+
+app.put('/v3/acmefilmes/diretores/:id', cors(), bodyParserJSON, async function(request,response,next){
+
+    let idDiretor = request.params.id
+    let contentType = request.headers['content-type'];
+    let dadosBody = request.body
+
+    let resultadoUpdateDiretor = await controllerDiretor.setAtualizarDiretor(idDiretor, dadosBody, contentType);
+
+    
+    response.status(resultadoUpdateDiretor.status_code)
+    response.json(resultadoUpdateDiretor)
+
+})
 
 
 app.listen('8080', function () {

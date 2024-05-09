@@ -2,7 +2,7 @@
 /****************************************************************
  * Objetivo: Arquivo responsavel pelas validações e consistências de dados de filme
  * Data: 01/02/2024
- * Autor: Vinicius
+ * Autor: Vitória
  * Versão: 1.0
  ****************************************************************/
 

@@ -1,5 +1,5 @@
 const { application } = require('express')
-const nacionalidadeDAO = require('../model/DAO/nacionalidade.js')
+const nacionalidadeDAO = require('../model/DAO/nacionalidade')
 const sexoDAO = require('../model/DAO/sexo.js')
 // Import do arquivo de configuração do projeto
 const message = require('../modulo/config.js')
@@ -11,7 +11,7 @@ const getListarNacionalidades = async function(){
 
 
     //Chama a função do DAO que retorna os filmes do BD
-    let dadosNacionalidade = await filmesDAO.selectAllNacionalidades()
+    let dadosNacionalidade = await nacionalidadeDAO.selectAllNacionalidades()
 
 
     //Validação para verificar se o DAO retornou dados
@@ -37,7 +37,7 @@ const getBuscarNacionalidadeId = async function (id){
         return message.ERROR_INVALID_ID//400
     }
     else {
-        let dadosNacionalidade = await filmesDAO.selectByIdNacionalidades(id)
+        let dadosNacionalidade = await nacionalidadeDAO.selectByIdNacionalidades(idNacionalidade)
         if (dadosNacionalidade) {
             if (dadosNacionalidade.length > 0) {
                 nacionalidadeJSON.Nacionalidade = dadosNacionalidade

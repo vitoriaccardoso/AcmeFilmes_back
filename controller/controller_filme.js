@@ -25,7 +25,7 @@ const setInserirNovoFilme = async function (dadosFilme, contentType) {
                 dadosFilme.foto_capa == '' || dadosFilme.foto_capa == undefined || dadosFilme.foto_capa == null || dadosFilme.foto_capa > 200 ||
                 dadosFilme.valor_unitario.length > 6
             ) {
-                return message.ERROR_REQUIRED_FIELDS//400
+                return message.ERROR_REQUIRE_FIELDS//400
             }
             else {
                 let validateStatus = false
@@ -33,7 +33,7 @@ const setInserirNovoFilme = async function (dadosFilme, contentType) {
                     dadosFilme.data_relancamento != '' &&
                     dadosFilme.data_relancamento != undefined) {
                     if (dadosFilme.data_relancamento.length != 10) {
-                        return message.ERROR_REQUIRED_FIELDS//400
+                        return message.ERROR_REQUIRE_FIELDS//400
                     }
                     else {
                         validateStatus = true

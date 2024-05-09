@@ -76,7 +76,7 @@ const updateAtor = async function(dadoAtualizado, idAtor) {
             WHERE
             tbl_ator.id_ator = ${idAtor}`
         }
-        console.log(sql)
+        
         let result = await prisma.$executeRawUnsafe(sql)
         
         if(result){
@@ -100,44 +100,38 @@ const deleteAtor = async function(id){
     }
 }
 
-const deleteAtorNacionalidade = async function(id){
-    try {
-        const sql = `delete from tbl_ator_nacionalidade where id_ator = ${id}`
-        let rsFilme = await prisma.$executeRawUnsafe(sql)
-        return rsFilme
-
-    } catch (error) {
-        return false
-    }
-}
 
 const selectAllAtor = async function(){
-    try {
-        let sql = 'select * from tbl_ator'
-    
-        // $queryRawUnsafe(sql)
-        // $queryRawUnsafe('select * from tbl_filme')
-        let rsFilmes = await prisma.$queryRawUnsafe(sql) 
-        return rsFilmes
-    } catch (error) {
-        return false
-    }
+    let sql = 'select * from tbl_ator'
 
+    //$queryRawUnsafe(sql)
+    //$queryRaw('select * from tbl_filme')
+
+    let rsAtor = await prisma.$queryRawUnsafe(sql)
+
+    if(rsAtor.length > 0)
+        return rsAtor
+    else 
+        return false
 
 
 }
 
 const selectByIdAtor = async function(id){
 
+    //encaminha o script sql par o bd
     try {
-        // Script sql para buscar o filme pelo id
-        const sql = `select * from tbl_ator where id_ator = ${id}`
-    
-        // Caminha o script sql para o banco de dados
-        let rsFilme = await prisma.$queryRawUnsafe(sql)
-    
-        return rsFilme
+
+        //ScriptSQL para buscar um ator pelo ID
+        let sql = `select * from tbl_ator where id_ator=${id}`
+
+        //Encaminha o script SQL para o Banco de Dados
+        let rsAtor = await prisma.$queryRawUnsafe(sql)
+
+        return rsAtor
+
     } catch (error) {
+
         return false
     }
 
@@ -153,18 +147,7 @@ const selectNameAtor = async function(nome){
     }
 }
 
-const IDAtor = async function(){
-    try {
-        let sql = `select cast(last_insert_id() as DECIMAL) as id_ator from tbl_ator limit 1`
 
-        let sqlID = await prisma.$queryRawUnsafe(sql)
-
-        return sqlID
-    } catch (error) {
-        return false
-    }
-    
-}
 
 module.exports = {
     insertAtor,
@@ -173,6 +156,5 @@ module.exports = {
     selectAllAtor,
     selectByIdAtor,
     selectNameAtor,
-    IDAtor,
-    deleteAtorNacionalidade
+  
 }
