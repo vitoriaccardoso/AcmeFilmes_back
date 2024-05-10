@@ -132,7 +132,7 @@ const selectByIdDiretor = async function (id) {
     try {
 
         //ScriptSQL para buscar um Diretor pelo ID
-        let sql = `select * from tbl_diretor where id=${id}`
+        let sql = `select * from tbl_diretor where id_diretor=${id}`
 
         //Encaminha o script SQL para o Banco de Dados
         let rsDiretor = await prisma.$queryRawUnsafe(sql)
